@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://p5fh1a75a.bkt.clouddn.com/scaner.PNG">
 <meta property="og:image" content="http://p5fh1a75a.bkt.clouddn.com/project.PNG">
 <meta property="og:image" content="http://p5fh1a75a.bkt.clouddn.com/properties.PNG">
-<meta property="og:updated_time" content="2018-03-11T14:04:54.575Z">
+<meta property="og:updated_time" content="2017-11-07T00:40:09.694Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zxing的简单使用及优化">
 <meta name="twitter:description" content="随着二维码使用的流行，现在基本上什么APP都会用到二维码功能，所以不管怎样，在项目中集成二维码功能都是非常有必要的。 ZXingZXing是由谷歌开发的一款条码，二维码扫描工具官方github地址： https://github.com/zxing/zxing 这个工程非常庞大包含很多项目，这里主要说一下关于android方面的。 说明首先需要说明，因为工作的关系，APP的开发一般使用Eclips">
@@ -371,7 +371,7 @@
 <h4 id="扫描线循环滚动"><a href="#扫描线循环滚动" class="headerlink" title="扫描线循环滚动"></a>扫描线循环滚动</h4><p>2.扫描线循环滚动关键代码段<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> move = frame.top + slideTop;      <span class="comment">//**掃描線循環滾動</span></span><br><span class="line"><span class="keyword">if</span> ((slideTop  += SPEEN_DISTANCE) &lt; frame.bottom - frame.top) &#123;</span><br><span class="line">  canvas.drawRect(frame.left + <span class="number">2</span>, move-<span class="number">1</span>, frame.right - <span class="number">1</span>, move+<span class="number">2</span>, paint);</span><br><span class="line">  invalidate();</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  slideTop  = <span class="number">0</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>3.修改ViewfinderView类的onDraw方法改变扫描框样式，只贴出关键部分<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">	......</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> (resultBitmap != <span class="keyword">null</span>) &#123;</span><br><span class="line">	  <span class="comment">// Draw the opaque result bitmap over the scanning rectangle</span></span><br><span class="line">	  <span class="comment">//paint.setAlpha(OPAQUE);</span></span><br><span class="line">	  paint.setAlpha(OPAQUE);</span><br><span class="line">	  canvas.drawBitmap(resultBitmap, frame.left, frame.top, paint);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	  <span class="comment">//******************************扫描框修改*****************************</span></span><br><span class="line">	  <span class="comment">// Draw a two pixel solid black border inside the framing rect</span></span><br><span class="line">	  drawFrame(canvas, frame);		  <span class="comment">//**繪製白色邊框</span></span><br><span class="line">	  drawFrameCorner(canvas, frame);		<span class="comment">//**繪製4個綠色邊角</span></span><br><span class="line"></span><br><span class="line">	  <span class="comment">// Draw a red "laser scanner" line through the middle to show decoding is active</span></span><br><span class="line">	  paint.setColor(laserColor);</span><br><span class="line">	  paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);</span><br><span class="line">	  scannerAlpha = (scannerAlpha + <span class="number">1</span>) % SCANNER_ALPHA.length;</span><br><span class="line">	  <span class="keyword">int</span> middle = frame.height() / <span class="number">2</span> + frame.top;</span><br><span class="line">	  <span class="keyword">int</span> move = frame.top + slideTop;      <span class="comment">//**掃描線循環滾動</span></span><br><span class="line">	  <span class="keyword">if</span> ((slideTop  += SPEEN_DISTANCE) &lt; frame.bottom - frame.top) &#123;</span><br><span class="line">		  canvas.drawRect(frame.left + <span class="number">2</span>, move-<span class="number">1</span>, frame.right - <span class="number">1</span>, move+<span class="number">2</span>, paint);</span><br><span class="line">		  invalidate();</span><br><span class="line">	  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		  slideTop  = <span class="number">0</span>;  </span><br><span class="line">	  &#125;</span><br><span class="line">	  <span class="comment">//***************************************************************</span></span><br><span class="line">	  .....</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="实现重复扫描功能"><a href="#实现重复扫描功能" class="headerlink" title="实现重复扫描功能"></a>实现重复扫描功能</h3><p>有些应用可能会需要用到连续扫描的功能，例如当做扫描枪使用之类什么的。修改CaptureActivity的handleDecode方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleDecode</span><span class="params">(Result result, Bitmap barcode)</span> </span>&#123;</span><br><span class="line">	inactivityTimer.onActivity();</span><br><span class="line">	playBeepSoundAndVibrate();</span><br><span class="line">	String resultString = result.getText();</span><br><span class="line">	<span class="comment">//FIXME</span></span><br><span class="line">	<span class="keyword">if</span> (resultString.equals(<span class="string">""</span>)) &#123;</span><br><span class="line">		Toast.makeText(CaptureActivity.<span class="keyword">this</span>, <span class="string">"Scan failed!"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">		Intent resultIntent = <span class="keyword">new</span> Intent();</span><br><span class="line">		Bundle bundle = <span class="keyword">new</span> Bundle();</span><br><span class="line">		bundle.putString(<span class="string">"result"</span>, resultString);</span><br><span class="line">		resultIntent.putExtras(bundle);</span><br><span class="line">		<span class="keyword">this</span>.setResult(RESULT_OK, resultIntent);</span><br><span class="line">	&#125;</span><br><span class="line">	hder.postDelayed(rePreview, <span class="number">2500</span>); 		<span class="comment">// **解碼回調函數	</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 掃描界面回調</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Handler hder = <span class="keyword">new</span> Handler();</span><br><span class="line">Runnable rePreview = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(LoginActivity.connectSwitch)&#123; connect(); &#125;</span><br><span class="line">		CameraManager.get().startPreview();</span><br><span class="line">		handler.restartPreviewAndDecode();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
-<p>关于回调方法，第二个参数是回调时间，部分机型不能设置太短，会造成程序崩溃<br>我对小米，索尼，华为，夏普等手机进行测试，个人猜测是手机摄像头硬件的限制<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hder.postDelayed(rePreview, <span class="number">2500</span>);</span><br></pre></td></tr></table></figure></p>
+<p>关于回调方法，第二个参数是回调时间，部分机型不能设置太短，会造成程序崩溃<br>我对小米，索尼，华为，夏普等手机进行测试，2500毫秒是临界点，个人猜测是手机摄像头硬件的限制<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hder.postDelayed(rePreview, <span class="number">2500</span>);</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -412,8 +412,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/11/局域网搭建Git服务器/" rel="prev" title="搭建Git服务器">
-                搭建Git服务器 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/01/12/Windows下搭建Git服务器/" rel="prev" title="Windows下搭建Git服务器">
+                Windows下搭建Git服务器 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -586,7 +586,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -657,6 +657,9 @@
 
 
 
+  
+  
+
 
 
 
@@ -689,6 +692,16 @@
   
   
     <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
   
 
 

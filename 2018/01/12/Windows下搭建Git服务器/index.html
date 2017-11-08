@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Git," />
 
 
 
@@ -79,16 +79,25 @@
 
 
 
-<meta name="description" content="好的心态自然会有好的运气">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Chankx">
-<meta property="og:url" content="https://chankx007.github.io/index.html">
+<meta name="description" content="借廖雪峰大神的一句话，Git是什么？Git是目前世界上最先进的分布式版本控制系统（没有之一）。当然Git和SVN哪个比较好用，这个就真的是见仁见智了。好比如一个小团队，代码量不多，页面也就那十来个，那即使用Git很可能只是当作SVN那样使用。但是学习Git总是有好处的，毕竟我们离不开Github。 说明Github可以理解为远程仓库，实际上本地仓库和远程仓库并没有什么不同，搭建私有的Git仓库官方">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows下搭建Git服务器">
+<meta property="og:url" content="https://chankx007.github.io/2018/01/12/Windows下搭建Git服务器/index.html">
 <meta property="og:site_name" content="Chankx">
-<meta property="og:description" content="好的心态自然会有好的运气">
+<meta property="og:description" content="借廖雪峰大神的一句话，Git是什么？Git是目前世界上最先进的分布式版本控制系统（没有之一）。当然Git和SVN哪个比较好用，这个就真的是见仁见智了。好比如一个小团队，代码量不多，页面也就那十来个，那即使用Git很可能只是当作SVN那样使用。但是学习Git总是有好处的，毕竟我们离不开Github。 说明Github可以理解为远程仓库，实际上本地仓库和远程仓库并没有什么不同，搭建私有的Git仓库官方">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://chankx007.github.io/images/git/properties.PNG">
+<meta property="og:image" content="https://chankx007.github.io/images/git/repo.PNG">
+<meta property="og:image" content="https://chankx007.github.io/images/git/httpPort.PNG">
+<meta property="og:image" content="https://chankx007.github.io/images/git/httpIp.PNG">
+<meta property="og:image" content="https://chankx007.github.io/images/git/installService.PNG">
+<meta property="og:image" content="https://chankx007.github.io/images/git/gitblitw.PNG">
+<meta property="og:updated_time" content="2017-11-07T08:11:34.621Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chankx">
-<meta name="twitter:description" content="好的心态自然会有好的运气">
+<meta name="twitter:title" content="Windows下搭建Git服务器">
+<meta name="twitter:description" content="借廖雪峰大神的一句话，Git是什么？Git是目前世界上最先进的分布式版本控制系统（没有之一）。当然Git和SVN哪个比较好用，这个就真的是见仁见智了。好比如一个小团队，代码量不多，页面也就那十来个，那即使用Git很可能只是当作SVN那样使用。但是学习Git总是有好处的，毕竟我们离不开Github。 说明Github可以理解为远程仓库，实际上本地仓库和远程仓库并没有什么不同，搭建私有的Git仓库官方">
+<meta name="twitter:image" content="https://chankx007.github.io/images/git/properties.PNG">
 
 
 
@@ -118,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="https://chankx007.github.io/"/>
+  <link rel="canonical" href="https://chankx007.github.io/2018/01/12/Windows下搭建Git服务器/"/>
 
 
 
 
 
-  <title>Chankx</title>
+  <title>Windows下搭建Git服务器 | Chankx</title>
   
 
 
@@ -143,8 +152,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -247,9 +255,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -279,9 +287,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/12/Windows下搭建Git服务器/" itemprop="url">Windows下搭建Git服务器</a></h1>
+          <h1 class="post-title" itemprop="name headline">Windows下搭建Git服务器</h1>
         
 
         <div class="post-meta">
@@ -353,19 +359,32 @@
       
 
       
-        
-          
-          借廖雪峰大神的一句话，Git是什么？Git是目前世界上最先进的分布式版本控制系统（没有之一）。当然Git和SVN哪个比较好用，这个就真的是见仁见智了。好比如一个小团队，代码量不多，页面也就那十来个，那即使用Git很可能只是当作SVN那样使用。但是学习Git总是有好处的，毕竟我们离不开Github。
+        <p>借廖雪峰大神的一句话，Git是什么？Git是目前世界上最先进的分布式版本控制系统（没有之一）。当然Git和SVN哪个比较好用，这个就真的是见仁见智了。好比如一个小团队，代码量不多，页面也就那十来个，那即使用Git很可能只是当作SVN那样使用。但是学习Git总是有好处的，毕竟我们离不开Github。</p>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>Github可以理解为远程仓库，实际上本地仓库和远程仓库并没有什么不同，搭建私有的Git仓库官方推荐是用运行Linux的机器，一般推荐用Ubuntu或Debian，因为通过几条简单的apt命令就可以完成。<br>但是由于手上没有Linux的机器，所以在Windows下使用基于JDK环境的Gitblit来搭建Git服务器。</p>
+<h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><ul>
+<li>JDK 使用版本jdk-1.8u131</li>
+<li>Git 选择Windows平台，使用版本2.15</li>
+<li>Gitblit 使用版本1.8.0  下载地址：<a href="http://www.gitblit.com" target="_blank" rel="noopener">http://www.gitblit.com</a></li>
+</ul>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><ul>
+<li>JDK环境配置比较基本，这里直接略过</li>
+<li>Git工具可以一直next安装到底，在选择编辑器时候可根据个人习惯选择，推荐使用notepad++<h3 id="配置Gitblit"><a href="#配置Gitblit" class="headerlink" title="配置Gitblit"></a>配置Gitblit</h3></li>
+</ul>
+<ol>
+<li><p>修改gitblit安装目录下的data文件下的gitblit.properties<br><code>java
+//将include = defaults.properties修改为include = my.properties</code><img src="/images/git/properties.PNG" alt="gitblit.properties配置图"></p>
+</li>
+<li><p>Gitblit下载完成以后创建用于储存资料的文件夹，我的路径为 E:\Git\gitRepository</p>
+</li>
+<li><p>gitblit安装目录下的data文件夹下有个defaults.properties文件，这是gitblit的默认配置，复制一遍该文件，并改名为上面图片修改的配置名称，这里就是my.properties</p>
+</li>
+<li><p>打开my.properties，主要修改以下几点：<br>4.1. 找到git.repositoriesFolder(资料库路径)：这里改成刚新建的仓库目录路径，不改默认为gitblit目录下的git目录. <img src="/images/git/repo.PNG" alt="资料库路径配置"><br>4.2. 找到server.httpPort：设定http协议的端口号。默认0表示禁用http协议，这里端口我设置为10086 <img src="/images/git/httpPort.PNG" alt="端口配置"><br>4.3. 找到server.httpBindInterface：设定服务器的IP地址。默认通过localhost访问，如果指定，则只能通过指定的ip地址访问<img src="/images/git/httpIp.PNG" alt="IP配置"></p>
+</li>
+<li><p>到这一步运行gitblit安装目录下的gitblit.cmd批处理文件就可以通过IP访问局域网Git服务器了，不过最好还是以Windows Service在后台运行，以防止控制台关掉服务器就挂了。<br>5.1. 用编辑器打开同一目录下的installService.cmd文件，ARCH设置为x86，CD设置为资料库路径。<font color="red">(注意：即使你的系统是64位，ARCH也设置为x86，不然服务启动不了，原因我也不知道)</font><img src="/images/git/installService.PNG" alt="installService.cmd文件配置"><br>5.2. 执行installService.cmd后，应该可以在后台服务中查看得到。但是有了服务后，很有可能会出现启动不了的情况，此时右键以管理员运行gitblitw.exe并设置jvm.dll<font color="red">(JVM.dll版本有很多，可以按照我这样设置，亲测成功)</font><img src="/images/git/gitblitw.PNG" alt="配置gitblitw.exe"></p>
+<h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>到这里GIt服务器基本就搭建完成了，使用上面和平常Github的差别不大。</p>
+</li>
+</ol>
 
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/12/Windows下搭建Git服务器/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
       
     </div>
     
@@ -380,291 +399,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chankx007.github.io/2017/11/03/Zxing的使用及优化/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chankx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chankx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/03/Zxing的使用及优化/" itemprop="url">Zxing的简单使用及优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-03T11:27:58+08:00">
-                2017-11-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/Git/" rel="tag"># Git</a>
           
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      
 
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
       
-        
-          
-          随着二维码使用的流行，现在基本上什么APP都会用到二维码功能，所以不管怎样，在项目中集成二维码功能都是非常有必要的。
-ZXingZXing是由谷歌开发的一款条码，二维码扫描工具官方github地址： https://github.com/zxing/zxing
-这个工程非常庞大包含很多项目，这里主要
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/11/03/Zxing的使用及优化/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/03/Zxing的使用及优化/" rel="next" title="Zxing的简单使用及优化">
+                <i class="fa fa-chevron-left"></i> Zxing的简单使用及优化
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
 
-    
-	
-    
+          <span class="post-nav-divider"></span>
 
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://chankx007.github.io/2017/11/02/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chankx">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chankx">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/02/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+          <div class="post-nav-prev post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-02T15:27:58+08:00">
-                2017-11-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-          第一篇博客文章，好好纪念一下
-
-          
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/11/02/hello-world/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-	
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -674,10 +438,11 @@ ZXingZXing是由谷歌开发的一款条码，二维码扫描工具官方github�
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -685,6 +450,10 @@ ZXingZXing是由谷歌开发的一款条码，二维码扫描工具官方github�
 
 
           
+
+  
+
+
 
         </div>
         
@@ -705,8 +474,17 @@ ZXingZXing是由谷歌开发的一款条码，二维码扫描工具官方github�
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -786,6 +564,22 @@ ZXingZXing是由谷歌开发的一款条码，二维码扫描工具官方github�
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下载安装"><span class="nav-number">2.</span> <span class="nav-text">下载安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境配置"><span class="nav-number">3.</span> <span class="nav-text">环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#配置Gitblit"><span class="nav-number">3.1.</span> <span class="nav-text">配置Gitblit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结束"><span class="nav-number">4.</span> <span class="nav-text">结束</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -932,6 +726,10 @@ ZXingZXing是由谷歌开发的一款条码，二维码扫描工具官方github�
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
