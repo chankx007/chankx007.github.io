@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="随着二维码使用的流行，现在基本上什么APP都会用到二维码功能，所以不管怎样，在项目中集成二维码功能都是非常有必要的。 ZXingZXing是由谷歌开发的一款条码，二维码扫描工具官方github地址： https://github.com/zxing/zxing 这个工程非常庞大包含很多项目，这里主要说一下关于android方面的。 说明首先需要说明，因为工作的关系，APP的开发一般使用Eclips">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zxing的简单使用及优化">
+<meta property="og:url" content="https://chankx007.github.io/2017/11/03/Zxing的使用及优化/index.html">
+<meta property="og:site_name" content="Chankx">
+<meta property="og:description" content="随着二维码使用的流行，现在基本上什么APP都会用到二维码功能，所以不管怎样，在项目中集成二维码功能都是非常有必要的。 ZXingZXing是由谷歌开发的一款条码，二维码扫描工具官方github地址： https://github.com/zxing/zxing 这个工程非常庞大包含很多项目，这里主要说一下关于android方面的。 说明首先需要说明，因为工作的关系，APP的开发一般使用Eclips">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p5fh1a75a.bkt.clouddn.com/scaner.PNG">
+<meta property="og:image" content="http://p5fh1a75a.bkt.clouddn.com/project.PNG">
+<meta property="og:image" content="http://p5fh1a75a.bkt.clouddn.com/properties.PNG">
+<meta property="og:updated_time" content="2018-03-11T14:04:54.575Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zxing的简单使用及优化">
+<meta name="twitter:description" content="随着二维码使用的流行，现在基本上什么APP都会用到二维码功能，所以不管怎样，在项目中集成二维码功能都是非常有必要的。 ZXingZXing是由谷歌开发的一款条码，二维码扫描工具官方github地址： https://github.com/zxing/zxing 这个工程非常庞大包含很多项目，这里主要说一下关于android方面的。 说明首先需要说明，因为工作的关系，APP的开发一般使用Eclips">
+<meta name="twitter:image" content="http://p5fh1a75a.bkt.clouddn.com/scaner.PNG">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://chankx007.github.io/2017/11/03/Zxing的使用及优化/"/>
+
+
+
+
+
+  <title>Zxing的简单使用及优化 | Chankx</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Chankx</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">好的心态自然会有好的运气</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-production">
+          <a href="/production/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            作品集
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://chankx007.github.io/2017/11/03/Zxing的使用及优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chankx">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chankx">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Zxing的简单使用及优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-03T11:27:58+08:00">
+                2017-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>随着二维码使用的流行，现在基本上什么APP都会用到二维码功能，所以不管怎样，在项目中集成二维码功能都是非常有必要的。</p>
+<h2 id="ZXing"><a href="#ZXing" class="headerlink" title="ZXing"></a>ZXing</h2><p>ZXing是由谷歌开发的一款条码，二维码扫描工具<br>官方github地址： <a href="https://github.com/zxing/zxing" target="_blank" rel="noopener">https://github.com/zxing/zxing</a></p>
+<p>这个工程非常庞大包含很多项目，这里主要说一下关于android方面的。</p>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>首先需要说明，因为工作的关系，APP的开发一般使用Eclipse，当然偶尔也会用AS。所以这里的开发环境是基于Eclipse的。由于官方android部分，包含了剪切板，扫描历史，分享，扫描二维码等等功能。如果只使用扫码功能，就需要剔除其他的功能。</p>
+<p>这里奉上一个自用的库，里面已经包含了最新的zxing.jar包，并且进行了一些界面修改，因为我电脑的操作系统系繁体中文的，所以要在简体操作系统上使用记得要将编码格式改为GBK<br>链接在此，<a href="https://github.com/chankx007/android.zxing" target="_blank" rel="noopener">点击我下载</a><br>效果图：<br><img src="http://p5fh1a75a.bkt.clouddn.com/scaner.PNG" alt="效果图"></p>
+<h2 id="简单的使用"><a href="#简单的使用" class="headerlink" title="简单的使用"></a>简单的使用</h2><p>clone项目，并导入Eclipse后<br><img src="http://p5fh1a75a.bkt.clouddn.com/project.PNG" alt="项目目录"><br>选中项目，快捷键Alt+Enter，打开项目属性窗口，将项目设置为库<br><img src="http://p5fh1a75a.bkt.clouddn.com/properties.PNG" alt="属性配置"><br>再新建一个安卓项目，重复操作打开项目属性窗口，点击Add按钮将库项目添加到新项目中去。<br>在新项目中添加按键监听事件<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">Button scanBarCodeButton = (Button) <span class="keyword">this</span>.findViewById(R.id.btn_scan_barcode);</span><br><span class="line">scanBarCodeButton.setOnClickListener(<span class="keyword">new</span> OnClickListener() &#123;</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">      <span class="comment">//打开扫描界面扫描条形码或二维码</span></span><br><span class="line">      Intent openCameraIntent = <span class="keyword">new</span> Intent(BarCodeTestActivity.<span class="keyword">this</span>,CaptureActivity.class);</span><br><span class="line">      startActivityForResult(openCameraIntent, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onActivityResult</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode, Intent data)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onActivityResult(requestCode, resultCode, data);</span><br><span class="line">    <span class="comment">//处理扫描结果（在界面上显示）</span></span><br><span class="line">    <span class="keyword">if</span> (resultCode == RESULT_OK) &#123;</span><br><span class="line">	    Bundle bundle = data.getExtras();</span><br><span class="line">	    String scanResult = bundle.getString(<span class="string">"result"</span>);</span><br><span class="line">	    resultTextView.setText(scanResult);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>到这里就可以使用二维码扫描功能了，不要忘记在AndroidManifest.xml添加权限和对应Activity。</p>
+<h2 id="常用功能优化"><a href="#常用功能优化" class="headerlink" title="常用功能优化"></a>常用功能优化</h2><h3 id="横屏竖屏修改"><a href="#横屏竖屏修改" class="headerlink" title="横屏竖屏修改"></a>横屏竖屏修改</h3><p>1.修改CameraConfigurationManager类中的setDesiredCameraParameters方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setDesiredCameraParameters</span><span class="params">(Camera camera)</span> </span>&#123;</span><br><span class="line">	Camera.Parameters parameters = camera.getParameters();</span><br><span class="line">	Log.d(TAG, <span class="string">"Setting preview size: "</span> + cameraResolution);</span><br><span class="line">	parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);</span><br><span class="line">	setFlash(parameters);</span><br><span class="line">	setZoom(parameters);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//**90度豎屏  0為橫屏</span></span><br><span class="line">	camera.setDisplayOrientation(<span class="number">90</span>);    </span><br><span class="line">	camera.setParameters(parameters);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2.修改CameraManager类中的getFramingRectInPreview方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> Rect <span class="title">getFramingRectInPreview</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (framingRectInPreview == <span class="keyword">null</span>) &#123;</span><br><span class="line">	  Rect rect = <span class="keyword">new</span> Rect(getFramingRect());						</span><br><span class="line">	  Point cameraResolution = configManager.getCameraResolution();</span><br><span class="line">	  Point screenResolution = configManager.getScreenResolution();</span><br><span class="line">	  <span class="comment">//**橫屏</span></span><br><span class="line">	  <span class="comment">//rect.left = rect.left * cameraResolution.x / screenResolution.x;</span></span><br><span class="line">	  <span class="comment">//rect.right = rect.right * cameraResolution.x / screenResolution.x;</span></span><br><span class="line">	  <span class="comment">//rect.top = rect.top * cameraResolution.y / screenResolution.y;</span></span><br><span class="line">	  <span class="comment">//rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;</span></span><br><span class="line">	  </span><br><span class="line">	  <span class="comment">//**豎屏</span></span><br><span class="line">	  rect.left = rect.left * cameraResolution.y / screenResolution.x;</span><br><span class="line">	  rect.right = rect.right * cameraResolution.y / screenResolution.x;</span><br><span class="line">	  rect.top = rect.top * cameraResolution.x / screenResolution.y;</span><br><span class="line">	  rect.bottom = rect.bottom * cameraResolution.x / screenResolution.y;</span><br><span class="line">	  framingRectInPreview = rect;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> framingRectInPreview;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.修改DecodeHandler类中的decode方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">decode</span><span class="params">(<span class="keyword">byte</span>[] data, <span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">	Result rawResult = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//*************************竖屏解码段*****************************</span></span><br><span class="line">	<span class="keyword">byte</span>[] rotatedData = <span class="keyword">new</span> <span class="keyword">byte</span>[data.length];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">0</span>; y &lt; height; y++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">0</span>; x &lt; width; x++)</span><br><span class="line">			rotatedData[x * height + height - y - <span class="number">1</span>] = data[x + y * width];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> tmp = width; <span class="comment">// Here we are swapping, that's the difference to #11</span></span><br><span class="line">	width = height;</span><br><span class="line">	height = tmp;</span><br><span class="line">	</span><br><span class="line">	PlanarYUVLuminanceSource source = CameraManager.get().buildLuminanceSource(rotatedData, width, height);</span><br><span class="line">	<span class="comment">//**************************************************************</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//*****橫屏解碼段*****</span></span><br><span class="line">	<span class="comment">//PlanarYUVLuminanceSource source = CameraManager.get().buildLuminanceSource(data, width, height);</span></span><br><span class="line">	</span><br><span class="line">	......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="竖屏拉伸问题"><a href="#竖屏拉伸问题" class="headerlink" title="竖屏拉伸问题"></a>竖屏拉伸问题</h3><p>改为竖屏显示时，常常伴有画面拉伸的现象，解决该问题可以修改CameraConfigurationManager类中的initFromCameraParameters方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">initFromCameraParameters</span><span class="params">(Camera camera)</span> </span>&#123;</span><br><span class="line">    Camera.Parameters parameters = camera.getParameters();</span><br><span class="line">    previewFormat = parameters.getPreviewFormat();</span><br><span class="line">    previewFormatString = parameters.get(<span class="string">"preview-format"</span>);</span><br><span class="line">    Log.d(TAG, <span class="string">"Default preview format: "</span> + previewFormat + <span class="string">'/'</span> + previewFormatString);</span><br><span class="line">    WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);</span><br><span class="line">    Display display = manager.getDefaultDisplay();</span><br><span class="line">    screenResolution = <span class="keyword">new</span> Point(display.getWidth(), display.getHeight());</span><br><span class="line">    Log.d(TAG, <span class="string">"Screen resolution: "</span> + screenResolution);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//---------------------竖屏拉伸解决函数-----------------</span></span><br><span class="line">    Point screenResolutionForCamera = <span class="keyword">new</span> Point();  </span><br><span class="line">    screenResolutionForCamera.x = screenResolution.x;  </span><br><span class="line">    screenResolutionForCamera.y = screenResolution.y;  </span><br><span class="line">    <span class="comment">// preview size is always something like 480*320, other 320*480  </span></span><br><span class="line">    <span class="keyword">if</span> (screenResolution.x &lt; screenResolution.y) &#123;  </span><br><span class="line">    	screenResolutionForCamera.x = screenResolution.y;  </span><br><span class="line">    	screenResolutionForCamera.y = screenResolution.x;  </span><br><span class="line">    &#125;  </span><br><span class="line">    cameraResolution = getCameraResolution(parameters, screenResolutionForCamera);</span><br><span class="line">    <span class="comment">//-----------------------------------------------------     </span></span><br><span class="line">    Log.d(TAG, <span class="string">"Camera resolution: "</span> + screenResolution);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="扫描框美化"><a href="#扫描框美化" class="headerlink" title="扫描框美化"></a>扫描框美化</h3><h4 id="绘制白色边框及绿色边角"><a href="#绘制白色边框及绿色边角" class="headerlink" title="绘制白色边框及绿色边角"></a>绘制白色边框及绿色边角</h4><p>1.扫描框是自定义组件，要改变样式需要修改ViewfinderView类的onDraw方法，首先添加白色边框方法和边角方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">drawFrame</span><span class="params">(Canvas canvas, Rect frame)</span></span>&#123;</span><br><span class="line">	<span class="comment">//**繪製白色邊框</span></span><br><span class="line">	paint.setColor(Color.WHITE);</span><br><span class="line">	canvas.drawRect(frame.left, frame.top, frame.right + <span class="number">1</span>, frame.top + <span class="number">2</span>, paint);</span><br><span class="line">	canvas.drawRect(frame.left, frame.top + <span class="number">2</span>, frame.left + <span class="number">2</span>, frame.bottom - <span class="number">1</span>, paint);</span><br><span class="line">	canvas.drawRect(frame.right - <span class="number">1</span>, frame.top, frame.right + <span class="number">1</span>, frame.bottom - <span class="number">1</span>, paint);</span><br><span class="line">	canvas.drawRect(frame.left, frame.bottom - <span class="number">1</span>, frame.right + <span class="number">1</span>, frame.bottom + <span class="number">1</span>, paint);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">drawFrameCorner</span><span class="params">(Canvas canvas, Rect frame)</span></span>&#123;</span><br><span class="line">	<span class="comment">//**繪製4個綠色邊角</span></span><br><span class="line">	paint.setColor(Color.GREEN);</span><br><span class="line">	<span class="comment">// 左上角</span></span><br><span class="line">	canvas.drawRect(frame.left, frame.top, frame.left + <span class="number">20</span>,frame.top + <span class="number">10</span>, paint);</span><br><span class="line">	canvas.drawRect(frame.left, frame.top, frame.left + <span class="number">10</span>,frame.top + <span class="number">20</span>, paint);</span><br><span class="line">	<span class="comment">// 右上角</span></span><br><span class="line">	canvas.drawRect(frame.right - <span class="number">20</span>, frame.top, frame.right,frame.top + <span class="number">10</span>, paint);</span><br><span class="line">	canvas.drawRect(frame.right - <span class="number">10</span>, frame.top, frame.right,frame.top + <span class="number">20</span>, paint);</span><br><span class="line">	<span class="comment">// 左下角</span></span><br><span class="line">	canvas.drawRect(frame.left, frame.bottom - <span class="number">10</span>, frame.left + <span class="number">20</span>,frame.bottom, paint);</span><br><span class="line">	canvas.drawRect(frame.left, frame.bottom - <span class="number">20</span>, frame.left + <span class="number">10</span>,frame.bottom, paint);</span><br><span class="line">	<span class="comment">// 右下角</span></span><br><span class="line">	canvas.drawRect(frame.right - <span class="number">20</span>, frame.bottom - <span class="number">10</span>, frame.right,frame.bottom, paint);</span><br><span class="line">	canvas.drawRect(frame.right - <span class="number">10</span>, frame.bottom - <span class="number">20</span>, frame.right,frame.bottom, paint);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="扫描线循环滚动"><a href="#扫描线循环滚动" class="headerlink" title="扫描线循环滚动"></a>扫描线循环滚动</h4><p>2.扫描线循环滚动关键代码段<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> move = frame.top + slideTop;      <span class="comment">//**掃描線循環滾動</span></span><br><span class="line"><span class="keyword">if</span> ((slideTop  += SPEEN_DISTANCE) &lt; frame.bottom - frame.top) &#123;</span><br><span class="line">  canvas.drawRect(frame.left + <span class="number">2</span>, move-<span class="number">1</span>, frame.right - <span class="number">1</span>, move+<span class="number">2</span>, paint);</span><br><span class="line">  invalidate();</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">  slideTop  = <span class="number">0</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3.修改ViewfinderView类的onDraw方法改变扫描框样式，只贴出关键部分<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">	......</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">if</span> (resultBitmap != <span class="keyword">null</span>) &#123;</span><br><span class="line">	  <span class="comment">// Draw the opaque result bitmap over the scanning rectangle</span></span><br><span class="line">	  <span class="comment">//paint.setAlpha(OPAQUE);</span></span><br><span class="line">	  paint.setAlpha(OPAQUE);</span><br><span class="line">	  canvas.drawBitmap(resultBitmap, frame.left, frame.top, paint);</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	  <span class="comment">//******************************扫描框修改*****************************</span></span><br><span class="line">	  <span class="comment">// Draw a two pixel solid black border inside the framing rect</span></span><br><span class="line">	  drawFrame(canvas, frame);		  <span class="comment">//**繪製白色邊框</span></span><br><span class="line">	  drawFrameCorner(canvas, frame);		<span class="comment">//**繪製4個綠色邊角</span></span><br><span class="line"></span><br><span class="line">	  <span class="comment">// Draw a red "laser scanner" line through the middle to show decoding is active</span></span><br><span class="line">	  paint.setColor(laserColor);</span><br><span class="line">	  paint.setAlpha(SCANNER_ALPHA[scannerAlpha]);</span><br><span class="line">	  scannerAlpha = (scannerAlpha + <span class="number">1</span>) % SCANNER_ALPHA.length;</span><br><span class="line">	  <span class="keyword">int</span> middle = frame.height() / <span class="number">2</span> + frame.top;</span><br><span class="line">	  <span class="keyword">int</span> move = frame.top + slideTop;      <span class="comment">//**掃描線循環滾動</span></span><br><span class="line">	  <span class="keyword">if</span> ((slideTop  += SPEEN_DISTANCE) &lt; frame.bottom - frame.top) &#123;</span><br><span class="line">		  canvas.drawRect(frame.left + <span class="number">2</span>, move-<span class="number">1</span>, frame.right - <span class="number">1</span>, move+<span class="number">2</span>, paint);</span><br><span class="line">		  invalidate();</span><br><span class="line">	  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		  slideTop  = <span class="number">0</span>;  </span><br><span class="line">	  &#125;</span><br><span class="line">	  <span class="comment">//***************************************************************</span></span><br><span class="line">	  .....</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="实现重复扫描功能"><a href="#实现重复扫描功能" class="headerlink" title="实现重复扫描功能"></a>实现重复扫描功能</h3><p>有些应用可能会需要用到连续扫描的功能，例如当做扫描枪使用之类什么的。修改CaptureActivity的handleDecode方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleDecode</span><span class="params">(Result result, Bitmap barcode)</span> </span>&#123;</span><br><span class="line">	inactivityTimer.onActivity();</span><br><span class="line">	playBeepSoundAndVibrate();</span><br><span class="line">	String resultString = result.getText();</span><br><span class="line">	<span class="comment">//FIXME</span></span><br><span class="line">	<span class="keyword">if</span> (resultString.equals(<span class="string">""</span>)) &#123;</span><br><span class="line">		Toast.makeText(CaptureActivity.<span class="keyword">this</span>, <span class="string">"Scan failed!"</span>, Toast.LENGTH_SHORT).show();</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">		Intent resultIntent = <span class="keyword">new</span> Intent();</span><br><span class="line">		Bundle bundle = <span class="keyword">new</span> Bundle();</span><br><span class="line">		bundle.putString(<span class="string">"result"</span>, resultString);</span><br><span class="line">		resultIntent.putExtras(bundle);</span><br><span class="line">		<span class="keyword">this</span>.setResult(RESULT_OK, resultIntent);</span><br><span class="line">	&#125;</span><br><span class="line">	hder.postDelayed(rePreview, <span class="number">2500</span>); 		<span class="comment">// **解碼回調函數	</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 掃描界面回調</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Handler hder = <span class="keyword">new</span> Handler();</span><br><span class="line">Runnable rePreview = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(LoginActivity.connectSwitch)&#123; connect(); &#125;</span><br><span class="line">		CameraManager.get().startPreview();</span><br><span class="line">		handler.restartPreviewAndDecode();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>关于回调方法，第二个参数是回调时间，部分机型不能设置太短，会造成程序崩溃<br>我对小米，索尼，华为，夏普等手机进行测试，个人猜测是手机摄像头硬件的限制<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hder.postDelayed(rePreview, <span class="number">2500</span>);</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+	
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/02/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/11/局域网搭建Git服务器/" rel="prev" title="搭建Git服务器">
+                搭建Git服务器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.jpg"
+                alt="Chankx" />
+            
+              <p class="site-author-name" itemprop="name">Chankx</p>
+              <p class="site-description motion-element" itemprop="description">好的心态自然会有好的运气</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/chankx007" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:chankx@126.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ZXing"><span class="nav-number">1.</span> <span class="nav-text">ZXing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">2.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的使用"><span class="nav-number">3.</span> <span class="nav-text">简单的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用功能优化"><span class="nav-number">4.</span> <span class="nav-text">常用功能优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#横屏竖屏修改"><span class="nav-number">4.1.</span> <span class="nav-text">横屏竖屏修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#竖屏拉伸问题"><span class="nav-number">4.2.</span> <span class="nav-text">竖屏拉伸问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扫描框美化"><span class="nav-number">4.3.</span> <span class="nav-text">扫描框美化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#绘制白色边框及绿色边角"><span class="nav-number">4.3.1.</span> <span class="nav-text">绘制白色边框及绿色边角</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扫描线循环滚动"><span class="nav-number">4.3.2.</span> <span class="nav-text">扫描线循环滚动</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现重复扫描功能"><span class="nav-number">4.4.</span> <span class="nav-text">实现重复扫描功能</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chankx</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
