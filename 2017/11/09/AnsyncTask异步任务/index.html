@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Chankx">
 <meta property="og:description" content="AnsyncTask类是Android的一个轻量级的用于处理异步任务的类，一般用法是继承AsyncTask类，然后在类中实现异步操作，再将异步执行的进度反映在主线程的UI组件上，也可以直接new一个新的AsyncTask的对象，重写里面的对应方法。关于AsyncTask异步任务的讲解网上很详细，这里自己也总结一下。 相关概念多线程概念 线程(Thread):程序执行流的最小单元，是程序中一个单一的">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-11-09T09:10:19.383Z">
+<meta property="og:updated_time" content="2018-03-16T09:01:33.574Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="AnsyncTask异步任务">
 <meta name="twitter:description" content="AnsyncTask类是Android的一个轻量级的用于处理异步任务的类，一般用法是继承AsyncTask类，然后在类中实现异步操作，再将异步执行的进度反映在主线程的UI组件上，也可以直接new一个新的AsyncTask的对象，重写里面的对应方法。关于AsyncTask异步任务的讲解网上很详细，这里自己也总结一下。 相关概念多线程概念 线程(Thread):程序执行流的最小单元，是程序中一个单一的">
@@ -355,11 +355,22 @@
         <p>AnsyncTask类是Android的一个轻量级的用于处理异步任务的类，一般用法是继承AsyncTask类，然后在类中实现异步操作，再将异步执行的进度反映在主线程的UI组件上，也可以直接new一个新的AsyncTask的对象，重写里面的对应方法。关于AsyncTask异步任务的讲解网上很详细，这里自己也总结一下。</p>
 <h2 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h2><h3 id="多线程概念"><a href="#多线程概念" class="headerlink" title="多线程概念"></a>多线程概念</h3><ul>
 <li>线程(Thread):程序执行流的最小单元，是程序中一个单一的顺序控制流程，每一个程序都至少有一个线程，若程序只有一个线程，那就是程序本身。</li>
-<li>多线程(multithreading)：并行地执行多条指令，将CPU的时间片按照调度算法，分配给各个线程，实际上是分时执行的，因为切换时间很短，让人感觉是同时实行！<h3 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h3></li>
+<li>多线程(multithreading)：并行地执行多条指令，将CPU的时间片按照调度算法，分配给各个线程，实际上是分时执行的，因为切换时间很短，让人感觉是同时实行！</li>
+</ul>
+<h3 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h3><ul>
 <li>同步：比如当我们做某件事情时，在没完成之前就不能做其他事情，简单说就是必须等前一件事做完才能做下一件事。对于程序而言，上一条语句没执行完就不能执行下一条语句。</li>
 <li>异步：当我们执行某个功能后，我们并不需要立即得到结果，我们额可以正常地做其他操作，这个功能可以在完成后通知或者回调来告诉我们</li>
 </ul>
-
+<hr>
+<h2 id="AsyncTask解析"><a href="#AsyncTask解析" class="headerlink" title="AsyncTask解析"></a>AsyncTask解析</h2><h3 id="使用AsyncTask的必要性"><a href="#使用AsyncTask的必要性" class="headerlink" title="使用AsyncTask的必要性"></a>使用AsyncTask的必要性</h3><ul>
+<li>由于Android是不允许一般线程中更新UI组件，另外Android4.0后禁止在UI线程中执行网络操作。这时候就需要异步操作，通常我们在Handler里写好UI更新，然后通过sendMessage()等的方法通知UI更新，但是Handler相较于AsyncTask是重量级的，AsyncTask轻量级异步类我们通过几十行的代码就可以完成 我们的异步操作，而且进度可控，实际异步用的最多的地方就是网络操作，图片加载，数据传输等</li>
+</ul>
+<h3 id="AsyncTask的结构"><a href="#AsyncTask的结构" class="headerlink" title="AsyncTask的结构"></a>AsyncTask的结构</h3><h4 id="AsyncTask子类的参数"><a href="#AsyncTask子类的参数" class="headerlink" title="AsyncTask子类的参数"></a>AsyncTask子类的参数</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">AsyncTask&lt;Params, Progress, Result&gt;		</span><br><span class="line"><span class="comment">//Params:启动任务执行的输入参数</span></span><br><span class="line"><span class="comment">//Progress:后台任务执行的百分比</span></span><br><span class="line"><span class="comment">//Result:后台执行任务完成后返回的结果</span></span><br><span class="line"><span class="comment">//不需要的指令类型可以写成Void(大写V)</span></span><br><span class="line"><span class="comment">//注意：参数都是泛型</span></span><br></pre></td></tr></table></figure>
+<h4 id="AsyncTask相关方法与流程"><a href="#AsyncTask相关方法与流程" class="headerlink" title="AsyncTask相关方法与流程"></a>AsyncTask相关方法与流程</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">AsyncTask&lt;Void, String, Void&gt; test = <span class="keyword">new</span> AsyncTask&lt;Void, String, Void&gt;()&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>&#123;  <span class="comment">//**非必要 </span></span><br><span class="line">		<span class="comment">//** 在执行后台耗时操作前被调用，通常用于一些初始化操作</span></span><br><span class="line">		<span class="keyword">super</span>.onPreExecute();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> Void <span class="title">doInBackground</span><span class="params">(Void... arg0)</span> </span>&#123;   <span class="comment">//**必要 </span></span><br><span class="line">		<span class="comment">//** 1.在onPreExecute()方法执行后马上执行，该方法运行与后台中，主要负责执行耗时操作;</span></span><br><span class="line">		<span class="comment">//** 2.通过调用publishProgress(String values)更新任务进度</span></span><br><span class="line">		<span class="comment">//** 3.publishProgress(String values)方法是可以多次调用的，每次调用到跳转到onProgressUpdate(String values)方法里面处理</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Void result)</span> </span>&#123;		<span class="comment">//**必要</span></span><br><span class="line">		<span class="comment">//** doInBackground执行完毕后，onPostExecute方法奖被UI线程调用，后台结果将在UI组件显示</span></span><br><span class="line">		<span class="keyword">super</span>.onPostExecute(result);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(String... values)</span> </span>&#123;		<span class="comment">//**非必要</span></span><br><span class="line">		<span class="comment">//** 1.参数values[0]就是 publishProgress(String values)方法传入的</span></span><br><span class="line">		<span class="comment">//** 2.可在此方法中更新UI控件,常用的是进度条</span></span><br><span class="line">		<span class="keyword">super</span>.onProgressUpdate(values);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCancelled</span><span class="params">()</span> </span>&#123;		<span class="comment">//**非必要</span></span><br><span class="line">		<span class="comment">// 在用户取消线程操作是调用</span></span><br><span class="line">		<span class="keyword">super</span>.onCancelled();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCancelled</span><span class="params">(Void result)</span> </span>&#123;		<span class="comment">//**非必要</span></span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		<span class="keyword">super</span>.onCancelled(result);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="使用注意"><a href="#使用注意" class="headerlink" title="使用注意"></a>使用注意</h4><pre><code>1.AsyncTask的实例以及execute()方法必须在UI线程中创建
+2.不要手动调用AsyncTask的实例里面重写的方法
+3.AsyncTask的实例只能被执行一次，多次调用会出现异常
+</code></pre><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2>
       
     </div>
     
@@ -482,7 +493,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -493,7 +504,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -504,7 +515,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -553,7 +564,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#相关概念"><span class="nav-number">1.</span> <span class="nav-text">相关概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程概念"><span class="nav-number">1.1.</span> <span class="nav-text">多线程概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步与异步"><span class="nav-number">1.2.</span> <span class="nav-text">同步与异步</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#相关概念"><span class="nav-number">1.</span> <span class="nav-text">相关概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程概念"><span class="nav-number">1.1.</span> <span class="nav-text">多线程概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步与异步"><span class="nav-number">1.2.</span> <span class="nav-text">同步与异步</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AsyncTask解析"><span class="nav-number">2.</span> <span class="nav-text">AsyncTask解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用AsyncTask的必要性"><span class="nav-number">2.1.</span> <span class="nav-text">使用AsyncTask的必要性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AsyncTask的结构"><span class="nav-number">2.2.</span> <span class="nav-text">AsyncTask的结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AsyncTask子类的参数"><span class="nav-number">2.2.1.</span> <span class="nav-text">AsyncTask子类的参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AsyncTask相关方法与流程"><span class="nav-number">2.2.2.</span> <span class="nav-text">AsyncTask相关方法与流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用注意"><span class="nav-number">2.2.3.</span> <span class="nav-text">使用注意</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结束"><span class="nav-number">3.</span> <span class="nav-text">结束</span></a></li></ol></div>
             
 
           </div>
@@ -573,7 +584,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; 2017 &mdash; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
